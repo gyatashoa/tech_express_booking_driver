@@ -31,7 +31,7 @@ class CloudFirestoreService {
     }
   }
 
-  Future updatedScanningStatus(String id) async {
+  Future updateScanningStatus(String id) async {
     try {
       await _firestore
           .collection(ticketsCollection)
