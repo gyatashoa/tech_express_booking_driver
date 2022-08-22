@@ -41,4 +41,14 @@ class CloudFirestoreService {
       return 'Error connecting to database';
     }
   }
+
+  Stream<QuerySnapshot<TicketModel>> getAllScannedTickets() async* {
+    yield* _firestore
+        .collection(ticketsCollection)
+        .where('status', isEqualTo: TicketStatus.SCANNED.index)
+        .withConverter<TicketModel>(
+            fromFirestore: (data, _) => TicketModel.fromJson(data.data()!),
+            toFirestore: (value, _) => value.toJson())
+        .snapshots();
+  }
 }
