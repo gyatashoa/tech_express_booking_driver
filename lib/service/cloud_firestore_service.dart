@@ -33,10 +33,19 @@ class CloudFirestoreService {
 
   Future updateScanningStatus(String id) async {
     try {
+      var res = await getTicketDetails(id);
+      if (res is String) {
+        return res;
+      }
+      var data = res as TicketModel;
+      if (data.ticketStatus == TicketStatus.SCANNED) {
+        return 'Ticket has already been scanned';
+      }
       await _firestore
           .collection(ticketsCollection)
           .doc(id)
           .update({'ticketStatus': TicketStatus.SCANNED.index});
+      return data;
     } on Exception {
       return 'Error connecting to database';
     }

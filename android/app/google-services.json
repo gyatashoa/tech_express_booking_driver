@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "671350276025",
+    "project_id": "tech-express-5d76f",
+    "storage_bucket": "tech-express-5d76f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671350276025:android:28778bb5b86e49993fc068",
+        "android_client_info": {
+          "package_name": "com.example.tech_express_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671350276025-s4krt56508al6kl7v3lnst16b70ag29o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCK4woONoh4PcyBOA-JCbOKlSJqpPhg4r8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671350276025-s4krt56508al6kl7v3lnst16b70ag29o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671350276025:android:e4991a64077d8f283fc068",
+        "android_client_info": {
+          "package_name": "com.example.tech_express_booking_driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671350276025-s4krt56508al6kl7v3lnst16b70ag29o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCK4woONoh4PcyBOA-JCbOKlSJqpPhg4r8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671350276025-s4krt56508al6kl7v3lnst16b70ag29o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
