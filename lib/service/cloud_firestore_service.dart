@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tech_express_booking_driver/model/status.dart';
 import 'package:tech_express_booking_driver/model/ticket_model.dart';
+import 'package:tech_express_booking_driver/service/sms_api_service.dart';
 
 class CloudFirestoreService {
   late FirebaseFirestore _firestore;
@@ -45,6 +46,10 @@ class CloudFirestoreService {
         'ticketStatus': TicketStatus.SCANNED.index,
         'timeScanned': FieldValue.serverTimestamp()
       });
+      SmsApiService.instance.sendSmsToUser(
+          phoneNumber: data.phoneNumber,
+          name: data.userName,
+          ticketId: data.id);
       return data;
     } on Exception {
       return 'Error connecting to database';
