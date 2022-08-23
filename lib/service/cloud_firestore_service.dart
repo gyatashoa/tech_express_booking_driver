@@ -41,10 +41,10 @@ class CloudFirestoreService {
       if (data.ticketStatus == TicketStatus.SCANNED) {
         return 'Ticket has already been scanned';
       }
-      await _firestore
-          .collection(ticketsCollection)
-          .doc(id)
-          .update({'ticketStatus': TicketStatus.SCANNED.index});
+      await _firestore.collection(ticketsCollection).doc(id).update({
+        'ticketStatus': TicketStatus.SCANNED.index,
+        'timeScanned': FieldValue.serverTimestamp()
+      });
       return data;
     } on Exception {
       return 'Error connecting to database';

@@ -15,6 +15,7 @@ class TicketModel {
   final int seatNumber;
   final DateTime createdAt;
   final TicketStatus ticketStatus;
+  final DateTime? timeScanned;
 
   TicketModel(
       {required this.id,
@@ -28,6 +29,7 @@ class TicketModel {
       required this.from,
       required this.seatNumber,
       required this.ticketStatus,
+      required this.timeScanned,
       required this.createdAt});
 
   TicketModel.fromJson(Map<String, dynamic> data)
@@ -37,6 +39,9 @@ class TicketModel {
         busType = _getBusType(data['busType']),
         arrivalDepTime = data['arrivalDepTime'],
         date = (data['date'] as Timestamp).toDate(),
+        timeScanned = data['timeScanned'] == null
+            ? null
+            : (data['timeScanned'] as Timestamp).toDate(),
         price = (data['price']),
         to = (data['to']),
         from = (data['from']),
@@ -57,6 +62,7 @@ class TicketModel {
         'price': price,
         'to': to,
         'from': from,
+        'timeScanned': FieldValue.serverTimestamp(),
         'ticketStatus': ticketStatus,
         'seatNumber': seatNumber,
         'createdAt': FieldValue.serverTimestamp()

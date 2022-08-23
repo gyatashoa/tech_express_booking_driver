@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:tech_express_booking_driver/screens/ticket_details.dart';
 import 'package:tech_express_booking_driver/service/cloud_firestore_service.dart';
 
 class Home extends StatefulWidget {
@@ -27,6 +28,8 @@ class _HomeState extends State<Home> {
         .updateScanningStatus(result!.code!);
     setState(() {
       _isLoading = false;
+      _enableBtn = false;
+      result = null;
     });
     if (res is String) {
       // ignore: use_build_context_synchronously
@@ -43,6 +46,7 @@ class _HomeState extends State<Home> {
           )));
       return;
     }
+
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(
             duration: const Duration(seconds: 2),
@@ -56,9 +60,10 @@ class _HomeState extends State<Home> {
               ],
             )))
         .closed
-        .then((value) => {
-              //Navigate here
-            });
+        .then((value) => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => TicketDetails(ticketModel: res))));
   }
 
   @override
@@ -112,18 +117,16 @@ class _HomeState extends State<Home> {
                   borderWidth: 10),
             ),
           ),
-          Expanded(
-              child: TextButton(
-                  onPressed: _enableBtn ? _onCheckOutUser : null,
-                  child: _isLoading
-                      ? const CircularProgressIndicator()
-                      : const Text('Check out user;'))),
+          TextButton(
+              onPressed: _enableBtn ? _onCheckOutUser : null,
+              child: _isLoading
+                  ? const CircularProgressIndicator()
+                  : const Text('Check out user')),
           Expanded(
             flex: 1,
             child: Center(
               child: (result != null)
-                  ? Text(
-                      'Barcode Type: ${result!.format}   Data: ${result!.code}')
+                  ? Text('Ticket ID: ${result!.code}')
                   : const Text('Scan a code'),
             ),
           )
