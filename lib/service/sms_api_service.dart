@@ -13,16 +13,20 @@ class SmsApiService {
   Future sendSmsToUser(
       {required String phoneNumber,
       required String name,
-      required String ticketId}) async {
+      required String ticketId,
+      bool test = false}) async {
     late String res;
     if (phoneNumber.startsWith('0')) {
-      res = phoneNumber.substring(1).padLeft(13, '+233');
+      res = '+233${phoneNumber.substring(1)}';
     } else {
       res = phoneNumber;
     }
     try {
-      _dio.post('$sms_api_base_url/scanned',
+      await _dio.post(
+          '${test ? sms_api_base_url_test : sms_api_base_url}/scanned',
           data: {'phoneNumber': res, 'name': name, 'ticketId': ticketId});
-    } on Exception {}
+    } on Exception catch (e) {
+      return e;
+    }
   }
 }
