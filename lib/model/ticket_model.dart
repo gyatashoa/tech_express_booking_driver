@@ -16,6 +16,7 @@ class TicketModel {
   final DateTime createdAt;
   final TicketStatus ticketStatus;
   final DateTime? timeScanned;
+  final String phoneNumber;
 
   TicketModel(
       {required this.id,
@@ -27,6 +28,7 @@ class TicketModel {
       required this.price,
       required this.to,
       required this.from,
+      required this.phoneNumber,
       required this.seatNumber,
       required this.ticketStatus,
       required this.timeScanned,
@@ -44,6 +46,7 @@ class TicketModel {
             : (data['timeScanned'] as Timestamp).toDate(),
         price = (data['price']),
         to = (data['to']),
+        phoneNumber = (data['phoneNumber']),
         from = (data['from']),
         seatNumber = (data['seatNumber']),
         ticketStatus = _getTicketStatus(data['ticketStatus'] ?? 0),
@@ -62,6 +65,7 @@ class TicketModel {
         'price': price,
         'to': to,
         'from': from,
+        'phoneNumber': phoneNumber,
         'timeScanned': FieldValue.serverTimestamp(),
         'ticketStatus': ticketStatus,
         'seatNumber': seatNumber,
