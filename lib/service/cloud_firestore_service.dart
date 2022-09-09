@@ -60,7 +60,7 @@ class CloudFirestoreService {
     yield* _firestore
         .collection(ticketsCollection)
         .where('ticketStatus', isEqualTo: TicketStatus.SCANNED.index)
-        .orderBy('timeScanned', descending: true)
+        // .orderBy('timeScanned', descending: true)
         .withConverter<TicketModel>(
             fromFirestore: (data, _) => TicketModel.fromJson(data.data()!),
             toFirestore: (value, _) => value.toJson())

@@ -7,6 +7,7 @@ import 'package:tech_express_booking_driver/model/ticket_model.dart';
 import 'package:tech_express_booking_driver/screens/ticket_details.dart';
 import 'package:tech_express_booking_driver/screens/tickets_search.dart';
 import 'package:tech_express_booking_driver/service/cloud_firestore_service.dart';
+import 'package:tech_express_booking_driver/utils/utils.dart';
 
 class ScannedTicketsPage extends StatelessWidget {
   const ScannedTicketsPage({super.key});
@@ -16,7 +17,8 @@ class ScannedTicketsPage extends StatelessWidget {
     return StreamBuilder<QuerySnapshot<TicketModel>>(
         stream: CloudFirestoreService.instance.getAllScannedTickets(),
         builder: (context, snapshot) {
-          final docs = snapshot.data?.docs.map((e) => e.data()).toList();
+          final docs = Utils.sortTickets(
+              snapshot.data?.docs.map((e) => e.data()).toList());
 
           return Scaffold(
             appBar: AppBar(
