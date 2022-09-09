@@ -59,7 +59,8 @@ class CloudFirestoreService {
   Stream<QuerySnapshot<TicketModel>> getAllScannedTickets() async* {
     yield* _firestore
         .collection(ticketsCollection)
-        .where('status', isEqualTo: TicketStatus.SCANNED.index)
+        .where('ticketStatus', isEqualTo: TicketStatus.SCANNED.index)
+        .orderBy('timeScanned', descending: true)
         .withConverter<TicketModel>(
             fromFirestore: (data, _) => TicketModel.fromJson(data.data()!),
             toFirestore: (value, _) => value.toJson())

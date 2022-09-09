@@ -24,7 +24,7 @@ class TicketDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: veppoBlue,
+        backgroundColor: Colors.green,
         elevation: 0,
         leading: IconButton(
           onPressed: () {
@@ -242,7 +242,7 @@ class TicketDetails extends StatelessWidget {
                                 fontWeight: FontWeight.bold),
                             children: [
                           TextSpan(
-                              text: DateTime.now().format,
+                              text: ticketModel.timeScanned?.formatter ?? ' - ',
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.normal))
@@ -349,7 +349,7 @@ class TicketDetails extends StatelessWidget {
 }
 
 extension on DateTime {
-  String get format {
+  String get formatter {
     int _hour = TimeOfDay.fromDateTime(this).hourOfPeriod;
     String _min = TimeOfDay.fromDateTime(this).minute < 10
         ? '0${TimeOfDay.fromDateTime(this).minute}'

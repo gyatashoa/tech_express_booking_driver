@@ -1,136 +1,93 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'package:tech_express_booking_driver/screens/ticket_details.dart';
-import 'package:tech_express_booking_driver/service/cloud_firestore_service.dart';
+import 'package:tech_express_booking_driver/screens/scanned_tickets.dart';
+import 'package:tech_express_booking_driver/screens/scanning_page.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
-
-  @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-
-  QRViewController? controller;
-  Barcode? result;
-  late bool _enableBtn;
-  late bool _isLoading;
-
-  Future<void> _onCheckOutUser() async {
-    setState(() {
-      _isLoading = true;
-    });
-    var res = await CloudFirestoreService.instance
-        .updateScanningStatus(result!.code!);
-    setState(() {
-      _isLoading = false;
-      _enableBtn = false;
-      result = null;
-    });
-    if (res is String) {
-      // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          duration: const Duration(seconds: 2),
-          content: Row(
-            children: [
-              const Icon(
-                Icons.error,
-                color: Colors.red,
-              ),
-              Text(res)
-            ],
-          )));
-      return;
-    }
-
-    ScaffoldMessenger.of(context)
-        .showSnackBar(SnackBar(
-            duration: const Duration(seconds: 2),
-            content: Row(
-              children: const [
-                Icon(
-                  Icons.check,
-                  color: Colors.green,
-                ),
-                Text('Ticket scanned successful')
-              ],
-            )))
-        .closed
-        .then((value) => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => TicketDetails(ticketModel: res))));
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _enableBtn = false;
-    _isLoading = false;
-  }
-
-  @override
-  void reassemble() {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      controller!.pauseCamera();
-    } else if (Platform.isIOS) {
-      controller!.resumeCamera();
-    }
-  }
-
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        //found
-        result = scanData;
-        if (result?.format == BarcodeFormat.qrcode) {
-          if (result?.code != null) {
-            _enableBtn = true;
-            return;
-          }
-        }
-        _enableBtn = false;
-      });
-    });
-  }
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.green,
+        title: const Text('Ticket Scanner'),
+        centerTitle: true,
+      ),
       body: Column(
         children: [
-          Expanded(
-            flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
-              overlay: QrScannerOverlayShape(
-                  borderColor: Colors.red,
-                  borderRadius: 10,
-                  borderLength: 20,
-                  borderWidth: 10),
-            ),
+          const SizedBox(
+            height: 20,
           ),
-          TextButton(
-              onPressed: _enableBtn ? _onCheckOutUser : null,
-              child: _isLoading
-                  ? const CircularProgressIndicator()
-                  : const Text('Check out user')),
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: (result != null)
-                  ? Text('Ticket ID: ${result!.code}')
-                  : const Text('Scan a code'),
-            ),
-          )
+          _CustomCard(
+            icon: Icons.qr_code_scanner_outlined,
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const ScanningPage()));
+            },
+            title: 'Scan a ticket',
+          ),
+          _CustomCard(
+            icon: Icons.document_scanner,
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => const ScannedTicketsPage()));
+            },
+            title: 'Check Scanned tickets',
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class _CustomCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+  final Color color;
+  const _CustomCard(
+      {super.key,
+      required this.icon,
+      this.color = Colors.green,
+      required this.title,
+      required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    final devSize = MediaQuery.of(context).size;
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          width: double.infinity,
+          height: devSize.height * 0.2,
+          decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.all(const Radius.circular(20))),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
+                  icon,
+                  size: 40,
+                  color: Colors.white,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  title,
+                  style: const TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
